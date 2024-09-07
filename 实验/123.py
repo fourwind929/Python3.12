@@ -1,10 +1,23 @@
-import logging
+import re
 
-logging.debug('This is a debug message')
-logging.info('This is an info message')
-logging.warning('This is a warning message')
-logging.error('This is an error message')
-logging.critical('This is a critical message')
+# Windows 路径正则表达式
+windows_pattern = r'^[A-Za-z]:\$[^\\:*?"<>|]+\$*[^\\:*?"<>|]*$'
 
-logging.basicConfig(format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s',
-                    level=logging.DEBUG)
+# Unix/Linux 路径正则表达式
+unix_pattern = r'^(/[^/]+)+/?$'
+
+# 测试字符串
+test_strings = [
+    "C:\\Users\\Username\\Documents\\file.txt",
+    "D:\\path\\to\\file",
+    "C:\\path\\to\\file:",
+    "/home/username/documents/file.txt",
+    "/path/to/file",
+    "/path/to/file/"
+]
+
+for s in test_strings:
+    if re.match(windows_pattern, s) or re.match(unix_pattern, s):
+        print(f"'{s}' 匹配")
+    else:
+        print(f"'{s}' 不匹配")

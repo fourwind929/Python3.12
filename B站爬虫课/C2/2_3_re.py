@@ -1,5 +1,4 @@
 import re
-from unittest import result
 
 # #findall()函数用于查找字符串中所有匹配正则表达式的子串，并返回一个列表。
 # lst = re.findall(r"\d+", "123 abc 456 789 def") 
@@ -22,9 +21,9 @@ from unittest import result
 
 
 
-# # #.match是从头开始匹配，如果字符串开头不匹配，则返回None。
-# s = re.match(r"\d+", "cba 123 abc 456 789 def")
-# print(s.group())
+# #.match是从头开始匹配，如果字符串开头不匹配，则返回None。
+# s = re.match(r"\d+", "dcba 123 abc 456 789 def")
+# print(s)
 
 
 
