@@ -1,6 +1,5 @@
 # 2_4_电影天堂2024必看热片.py
 from calendar import c
-from tokenize import cookie_re
 import requests
 import re
 import csv

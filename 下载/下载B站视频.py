@@ -1,11 +1,20 @@
+from unittest import result
 import requests
+import re
 from moviepy.editor import *
+import os
 
-# x1 = input("请输入B站视频链接：")
-# x2 = input("请输入B站视频音乐链接：")
+download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
 
-url_video = input("请输入B站视频链接：")
-url_audio = input("请输入B站视频音乐链接：")
+print("请输入保存路径(不输入直接enter确定则默认下载到~/Downloads/B站视频):")
+folder = input()    # 输入保存路径
+if folder == "":
+    folder = download_folder  +  "/B站视频"
+
+if not os.path.exists(folder):
+    os.makedirs(folder)
+
+os.chdir(folder)
 
 dic = {
     "user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"
@@ -13,17 +22,55 @@ dic = {
     ,"referer":"https://www.bilibili.com/"
 }#请求头
 
-response_video = requests.get(url_video,headers=dic)
+# url = "https://www.bilibili.com/video/BV1PDWdeSEh8/"
 
-open("video.mp4","wb").write(response_video.content)
+print("请输入BV号,如BVxxxxxxxxxx：")
+x = input()
+obj_BV = re.compile(r'BV[a-zA-Z0-9]{10}')
+if not obj_BV.match(x):
+    print("输入的BV号不合法！")
+    exit()
+ 
+url = f"https://www.bilibili.com/video/{x}/"
 
-response_audio = requests.get(url_audio,headers=dic)
+response = requests.get(url, headers=dic)#发送请求
+# print(response.text)
 
-open("audio.mp3","wb").write(response_audio.content)
+obj_title = re.compile(r'<title data-vue-meta="true">(?P<title>.*?)</title>',re.S)#获取标题
+obj_video = re.compile(r'<style id="setSizeStyle"></style>.*?baseUrl":.*?"(?P<video>.*?)"',re.S)#获取视频链接
+obj_audio = re.compile(r'"audio":.*?"baseUrl":.*?"(?P<audio>.*?)"',re.S)#获取视频音频连接
 
-video = VideoFileClip("video.mp4")
-audio = AudioFileClip("audio.mp3")
+result_title = obj_title.search(response.text)
+title = result_title.group("title")
+print("是否下载标题为：",title,"的视频？(y/n)")
+if input(":") == "n":
+    exit()
 
-final_clip = video.set_audio(audio)
+print("开始下载...")
+# 获取标题
 
-final_clip.write_videofile("final.mp4")
+result_video = obj_video.search(response.text)
+result_audio = obj_audio.search(response.text)
+url_video = result_video.group("video")
+url_audio = result_audio.group("audio")
+# 获取视频链接和音频链接
+
+open(".cache_video.mp4", "wb").write(requests.get(url_video, headers=dic).content)
+open(".cache_audio.mp3", "wb").write(requests.get(url_audio, headers=dic).content)
+# 下载视频和音频
+print("视频和音频下载完成...")
+print(f"{title}bilibiliTEMP_MPY_wvf_snd.mp3”是临时文件，请勿删除。")
+
+video = VideoFileClip(".cache_video.mp4")
+audio = AudioFileClip(".cache_audio.mp3")
+
+final_clip = video.set_audio(audio)# 合并视频和音频
+final_clip.write_videofile(f"{title}.mp4")
+
+# 删除缓存文件
+print("视频导出成功,正在删除缓存文件...")
+os.remove(".cache_video.mp4")
+os.remove(".cache_audio.mp3")
+
+# 导出视频
+print("完成!")
