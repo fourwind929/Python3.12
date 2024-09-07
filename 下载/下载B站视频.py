@@ -21,8 +21,6 @@ dic = {
     ,"referer":"https://www.bilibili.com/"
 }#请求头
 
-# url = "https://www.bilibili.com/video/BV1PDWdeSEh8/"
-
 print("请输入BV号,如BVxxxxxxxxxx：")
 x = input()
 obj_BV = re.compile(r'BV[a-zA-Z0-9]{10}')
