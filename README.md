@@ -6,3 +6,4 @@
 pip install requests
 pip install beautifulsoup4
 pip install moviepy
+pip install bs4
