@@ -1,4 +1,5 @@
 import requests
+from moviepy.editor import *
 
 url_video = input("请输入视频视频网址：")
 url_audio = input("请输入视频音频网址：")
@@ -19,13 +20,13 @@ open(".cache_video.mp4", "wb").write(requests.get(url_video, headers=dic).conten
 open(".cache_audio.mp3", "wb").write(requests.get(url_audio, headers=dic).content)
 # 下载视频和音频
 print("视频和音频下载完成...")
-print(f"{title}bilibiliTEMP_MPY_wvf_snd.mp3”是临时文件，请勿删除。下载完成后会自动删除。")
+print(f"xxxxxbilibiliTEMP_MPY_wvf_snd.mp3”是临时文件，请勿删除。下载完成后会自动删除。")
 
 video = VideoFileClip(".cache_video.mp4")
 audio = AudioFileClip(".cache_audio.mp3")
 
 final_clip = video.set_audio(audio)# 合并视频和音频
-final_clip.write_videofile(f"{title}.mp4")
+final_clip.write_videofile("xxxxxxxx.mp4")
 # 导出视频
 
 # 删除缓存文件
