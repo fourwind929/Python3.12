@@ -7,6 +7,7 @@ download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
 
 obj_path = re.compile(r'^[A-Za-z]:\$[^\\:*?"<>|]+\$*[^\\:*?"<>|]*$')
 
+print("不可下载分P视频，只下载单P视频。")
 print("请输入保存路径(不输入直接enter确定则默认下载到~/Downloads/B站视频):")
 print("路径必须为绝对路径，且不能包含中文、空格、特殊字符，不得以/结尾。")
 print("注：路径必须存在，否则程序会自动创建。")
