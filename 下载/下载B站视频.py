@@ -1,3 +1,4 @@
+from math import e
 import requests
 import re
 from moviepy.editor import *
@@ -19,6 +20,7 @@ else:
     while not obj_path.match(folder):
         print("输入的路径不合法！")
         folder = input("请重新输入保存路径：")
+if not os.path.exists(folder):   # 如果路径不存在，则创建路径
     os.makedirs(folder)
 
 os.chdir(folder)
