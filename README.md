@@ -12,7 +12,7 @@
 * 提交说明：s-年-月-日-时间，如：s-2024-01-01-10:00
 
 ##代码中使用到的所有非默认安装库的安装方法：
-<details open>
+
 ```python
 pip install requests
 ```
