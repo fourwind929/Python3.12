@@ -1,4 +1,3 @@
-from math import e
 import requests
 import re
 from moviepy.editor import *
