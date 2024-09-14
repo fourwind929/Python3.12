@@ -48,7 +48,7 @@ while model == "y":
         obj_BV = re.compile(r'BV[a-zA-Z0-9]{10}')
         while not obj_BV.match(bv):
             print("输入的BV号不合法！")
-            BV = input("请重新输入BV号：")
+            bv = input("请重新输入BV号：")
         
         url = f"https://www.bilibili.com/video/{bv}/"
 
