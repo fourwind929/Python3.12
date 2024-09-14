@@ -25,4 +25,3 @@ pip install moviepy
 ```python
 pip install bs4
 ```
-</details>
