@@ -16,7 +16,6 @@ dic = {
 
 import os
 download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
-folder = download_folder
 folder = download_folder  +  "/示例文件夹"
 if not os.path.exists(folder):   # 如果路径不存在，则创建路径
     os.makedirs(folder)
