@@ -32,46 +32,77 @@ dic = {
 obj_title = re.compile(r'<title data-vue-meta="true">(?P<title>.*?)</title>',re.S)#获取标题
 obj_video = re.compile(r'<style id="setSizeStyle"></style>.*?baseUrl":.*?"(?P<video>.*?)"',re.S)#获取视频链接
 obj_audio = re.compile(r'"audio":.*?"baseUrl":.*?"(?P<audio>.*?)"',re.S)#获取视频音频连接
+obj_title_test = re.compile(r'<title>(?P<title_test>.*?)</title>',re.S)#获取标题
+obj_BV = re.compile(r'^BV[a-zA-Z0-9]{10}$')
 
-model = "y"
+restart = "y"
 
-while model == "y":
+while restart == "y":
 
-    retry = "y"
+    reinput = "y"
+    print("请输入BV号,如BVxxxxxxxxxx：")
+    bv = input("请输入BV号：")
 
-    while retry == "y":
+    while reinput == "y":
 
-        print("请输入BV号,如BVxxxxxxxxxx：")
-        bv = input()
-        obj_BV = re.compile(r'BV[a-zA-Z0-9]{10}')
         while not obj_BV.match(bv):
-            print("输入的BV号不合法！")
+            print("输入的BV号不符合格式！")
             bv = input("请重新输入BV号：")
         
         url = f"https://www.bilibili.com/video/{bv}/"
 
         response = requests.get(url, headers=dic)#发送请求
+        response.encoding = 'utf-8'
+
+
+
+
+
+
+
+
+
+        
+
+        result_title_test = obj_title_test.search(response.text)
+        title_test = result_title_test.group("title_test")#寻找网页标题
+     
+        if "出错啦!" in title_test:
+            print("视频不存在或已被删除！")
+            bv = input("请重新输入BV号：")
+            reinput = "y"
+            continue
+        
+
         result_title = obj_title.search(response.text)
         title = result_title.group("title")
 
         print("获取标题成功")
-        print("是否下载标题为：",title,"的视频？(y/n)")
-        while input(":") == "n":
-            print("视频不对？是否输入新的BV号？(y/n/e)，按y重新输入，按n直接下载已输入BV号视频，按e退出程序并退出命令行。")
-            choice = input(":")
-            if choice == "y":
-                retry = "y"
-                break
-            
-            if choice == "n":
-                retry = "n"
-                break
+        # print("是否下载标题为：",title,"的视频？(y/n)")
+        title_choice = input(f"是否下载标题为：",title,"的视频？(y/n):")
 
-            if choice == "e":
-                response.close() #关闭请求
-                print("程序已退出。")
-                exit()
-        retry = "n"
+        while title_choice != "y" and title_choice != "n":
+            title_choice = input("输入错误！请重新输入:")
+
+        else:
+            if title_choice == "n":# 选择不下载
+                # print("视频不对？是否输入新的BV号？(y/n/e)，按y重新输入，按n直接下载已输入BV号视频，按e退出程序并退出命令行。")
+                choice = input("视频不对？是否输入新的BV号？(y/n/e)，按y重新输入，按n直接下载已输入BV号视频，按e退出程序并退出命令行:")
+                if choice == "y":
+                    reinput = "y"
+                    break
+                
+                if choice == "n":
+                    reinput = "n"
+                    break
+
+                if choice == "e":
+                    response.close() #关闭请求
+                    print("程序已退出。")
+                    exit()
+
+            if title_choice == "y":
+                reinput = "n"
 
     print("开始下载...")
     # 获取标题
@@ -101,11 +132,15 @@ while model == "y":
     os.remove(".cache_audio.mp3")
 
     print("完成!")
-    print("是否继续下载视频？(y/n)")
-    if input(":") == "n":
-        model = "n"
+    
+    redanwload = input("是否继续下载视频？(y/n):")
+    while redanwload != "n" and redanwload != "y":
+        redanwload = input("输入错误！请重新输入:")
     else:
-        model = "y"
+        if redanwload == "y":
+            restart = "y"
+        else:
+            restart = "n"
 
-response.close() #关闭请求
-print("程序已退出。")
+    response.close() #关闭请求
+    print("程序已退出。")
