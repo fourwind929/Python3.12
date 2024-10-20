@@ -26,7 +26,7 @@ video = VideoFileClip("cache_video.mp4")
 audio = AudioFileClip("cache_audio.mp3")
 
 final_clip = video.set_audio(audio)# 合并视频和音频
-final_clip.write_videofile(f"{title}.mp4")
+final_clip.write_videofile(f"链接视频.mp4")
 # 导出视频
 
 # 删除缓存文件
