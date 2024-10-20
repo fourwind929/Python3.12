@@ -1,3 +1,4 @@
+from math import e
 import requests
 import re
 from moviepy.editor import *
@@ -29,14 +30,13 @@ dic = {
     ,"referer":"https://www.bilibili.com/"
 }#请求头
 
-obj_title = re.compile(r'<title data-vue-meta="true">(?P<title>.*?)</title>',re.S)#获取标题
+obj_title_find = re.compile(r'<title data-vue-meta="true">(?P<title>.*?)</title>',re.S)#获取标题
 obj_video = re.compile(r'<style id="setSizeStyle"></style>.*?baseUrl":.*?"(?P<video>.*?)"',re.S)#获取视频链接
 obj_audio = re.compile(r'"audio":.*?"baseUrl":.*?"(?P<audio>.*?)"',re.S)#获取视频音频连接
-obj_title_test = re.compile(r'<title>(?P<title_test>.*?)</title>',re.S)#获取标题
+obj_title_findErro = re.compile(r'<title>(?P<title_find1>.*?)</title>',re.S)#获取标题
 obj_BV = re.compile(r'^BV[a-zA-Z0-9]{10}$')
 
 restart = "y"
-
 while restart == "y":
 
     reinput = "y"
@@ -54,32 +54,23 @@ while restart == "y":
         response = requests.get(url, headers=dic)#发送请求
         response.encoding = 'utf-8'
 
+        result_title_findErro = obj_title_findErro.search(response.text)
+        if result_title_findErro == None:
+            result_title = obj_title_find.search(response.text)
+            title = result_title.group("title")
 
+        else:
+            title = result_title_findErro.group("title_find1")
 
-
-
-
-
-
-
-        
-
-        result_title_test = obj_title_test.search(response.text)
-        title_test = result_title_test.group("title_test")#寻找网页标题
-     
-        if "出错啦!" in title_test:
+        if "出错啦!" in title or "视频去哪了呢？" in title:
             print("视频不存在或已被删除！")
             bv = input("请重新输入BV号：")
             reinput = "y"
             continue
-        
-
-        result_title = obj_title.search(response.text)
-        title = result_title.group("title")
 
         print("获取标题成功")
         # print("是否下载标题为：",title,"的视频？(y/n)")
-        title_choice = input(f"是否下载标题为：",title,"的视频？(y/n):")
+        title_choice = input(f"是否下载标题为:《{title}》,的视频？(y/n):")
 
         while title_choice != "y" and title_choice != "n":
             title_choice = input("输入错误！请重新输入:")
@@ -105,7 +96,6 @@ while restart == "y":
                 reinput = "n"
 
     print("开始下载...")
-    # 获取标题
 
     result_video = obj_video.search(response.text)
     result_audio = obj_audio.search(response.text)

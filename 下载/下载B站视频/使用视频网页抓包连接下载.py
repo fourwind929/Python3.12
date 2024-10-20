@@ -16,20 +16,20 @@ if not os.path.exists(folder):   # 如果路径不存在，则创建路径
     os.makedirs(folder)
 os.chdir(folder)
 
-open(".cache_video.mp4", "wb").write(requests.get(url_video, headers=dic).content)
-open(".cache_audio.mp3", "wb").write(requests.get(url_audio, headers=dic).content)
+open("cache_video.mp4", "wb").write(requests.get(url_video, headers=dic).content)
+open("cache_audio.mp3", "wb").write(requests.get(url_audio, headers=dic).content)
 # 下载视频和音频
 print("视频和音频下载完成...")
-print(f"xxxxxbilibiliTEMP_MPY_wvf_snd.mp3”是临时文件，请勿删除。下载完成后会自动删除。")
+print("视频文件路径bilibiliTEMP_MPY_wvf_snd.mp3”是临时文件，请勿删除。下载完成后会自动删除。")
 
-video = VideoFileClip(".cache_video.mp4")
-audio = AudioFileClip(".cache_audio.mp3")
+video = VideoFileClip("cache_video.mp4")
+audio = AudioFileClip("cache_audio.mp3")
 
 final_clip = video.set_audio(audio)# 合并视频和音频
-final_clip.write_videofile("xxxxxxxx.mp4")
+final_clip.write_videofile(f"{title}.mp4")
 # 导出视频
 
 # 删除缓存文件
 print("视频导出成功,正在删除缓存文件...")
-os.remove(".cache_video.mp4")
-os.remove(".cache_audio.mp3")
+os.remove("cache_video.mp4")
+os.remove("cache_audio.mp3")
