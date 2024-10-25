@@ -43,7 +43,7 @@ else:
 
 dic = {
     "user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"
-    ,"cookie":"buvid4=86705F0E-94A1-4BC8-7377-4E8B8E8D3BD284330-023082108-nStoKVDpV6TWmkr8NXd3WtSxKnyqevuExi3ulVPy6uBib7oNdvXzGA%3D%3D; header_theme_version=CLOSE; buvid_fp_plain=undefined; LIVE_BUVID=AUTO2616959926194049; enable_web_push=DISABLE; DedeUserID=1292515807; DedeUserID__ckMd5=4304e455feb2ad9a; blackside_state=0; CURRENT_BLACKGAP=0; FEED_LIVE_VERSION=V8; PVID=1; balh_server_inner=__custom__; balh_is_closed=; buvid3=11D252E5-4F95-36FE-718C-2804E3AABA9872508infoc; b_nut=1724132572; _uuid=D9E682B2-82BF-4EE4-10F52-49621E66CCA773430infoc; CURRENT_FNVAL=4048; hit-dyn-v2=1; rpdid=0zbfvRPVul|VGkZ0byE|PTA|3w1SZR0r; fingerprint=8c54690999a2ce2631d7c96a147b98e2; buvid_fp=8c54690999a2ce2631d7c96a147b98e2; bp_t_offset_1292515807=990231025357422592; home_feed_column=5; browser_resolution=1432-816; b_lsid=D6B10C739_192C3F5A903; bmg_af_switch=1; bmg_src_def_domain=i0.hdslb.com; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzAxMjM3MTMsImlhdCI6MTcyOTg2NDQ1MywicGx0IjotMX0.bub-Bqpqu-bq4giiS3qm_6uq_tC3y6XJz-U8J3WoUV8; bili_ticket_expires=1730123653; SESSDATA=73624c07%2C1745416515%2Ca46e5%2Aa1CjAdaOasbc0V61RYpN__XYY_PX5qSzeG_xsi76nPXiWckWMi6y7muAIo9GFb_JBe3HISVjR2WjlhcDR6VU1YbTJMWWc2VTZRUmhSWnVHbXB2N3NpWFFhZEYtcTFNdTVWQ3dOU3FXck54WVpaSTZYczFjLTRfS0xmczhNTFpRTC0wS21fVkpMbkFBIIEC; bili_jct=ae31c52925e6ef238ac425922f86b146; sid=55njneex; CURRENT_QUALITY=80"# 请自行替换cookie
+    ,"cookie":f"{cookie}"
     ,"referer":"https://www.bilibili.com/"
 }#请求头
 
@@ -114,8 +114,8 @@ while restart == "y":
 
     print("开始下载...")
 
-    print(obj_video.search(response.text).group("video"))
-    print(obj_audio.search(response.text).group("audio"))
+    # print(obj_video.search(response.text).group("video"))
+    # print(obj_audio.search(response.text).group("audio"))
 
     result_video = obj_video.search(response.text)
     result_audio = obj_audio.search(response.text)
