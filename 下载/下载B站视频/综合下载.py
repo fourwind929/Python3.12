@@ -1,27 +1,28 @@
-from calendar import c
+
 import requests
 import re
 from moviepy.editor import *
 import os
 
+obj_path = re.compile(r'^[A-Za-z]:\$[^\\:*?"<>|]+\$*[^\\:*?"<>|]*$')
 obj_title_find = re.compile(r'<title data-vue-meta="true">(?P<title>.*?)</title>',re.S)#获取标题
 obj_video = re.compile(r'<style id="setSizeStyle"></style>.*?baseUrl":.*?"(?P<video>.*?)"',re.S)#获取视频链接
 obj_audio = re.compile(r'"audio":.*?"baseUrl":.*?"(?P<audio>.*?)"',re.S)#获取视频音频连接
 obj_title_findErro = re.compile(r'<title>(?P<title_find1>.*?)</title>',re.S)#获取标题
-obj_BV = re.compile(r'^(BV[a-zA-Z0-9]{10}|av\d{9})$')#验证BV号格式
-obj_path = re.compile(r'^[A-Za-z]:\$[^\\:*?"<>|]+\$*[^\\:*?"<>|]*$')
+obj_BV = re.compile(r'^BV[a-zA-Z0-9]{10}$')
+
 download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
 
-print("欢迎使用视频号（BV号或av号）下载B站视频！")
+print("欢迎使用本B站视频下载器！")
 print("tips:")
 print("不可下载分P视频，只下载单P视频。")
 print("本程序不含cookie，请先登录B站并复制cookie内容写入一个文本文件，文件名为<B-cookie.txt>，并保存到Documents文件夹。")
 print("如果程序无法获取cookie，则程序会自动下载清晰度最低的视频。")
 print("————————————————————————————————————————————————————————————————————————————————————————————————————")
+
 print("请输入保存路径(不输入直接enter确定则默认下载到~/Downloads/B站视频):")
 print("路径必须为绝对路径，且不能包含中文、空格、特殊字符，不得以/结尾。")
 print("注：路径必须存在，否则程序会自动创建。")
-
 folder = input()    # 输入保存路径
 if folder == "":
     folder = download_folder  +  "/B站视频"
@@ -53,52 +54,64 @@ dic = {
     ,"referer":"https://www.bilibili.com/"
 }#请求头
 
-restart = "y"
-while restart == "y":
 
-    print("请输入视频号,如BVxxxxxxxxxx：")
-    bv = input("请输入视频号：")
+
+
+
+retry_way = input("请选择下载方式：1.搜索关键词 2.输入视频号（BV号或av号）：(输错退出程序)")
+while retry_way == "1" or retry_way == "2":
     
-    # 处理用户输入的循环
-    while True:
-        if not obj_BV.match(bv):
-            print("输入的视频号不符合格式！")
-            bv = input("请重新输入视频号：")
-            continue  # 继续上面的循环重新输入
-        else:
-            break  # 输入合法，跳出当前循环
+    if retry_way == "1":#关键词搜索
+        print("此功能未完成")
+
+
+        break
+
+    elif retry_way == "2":#输入视频号搜索
+
+        print("请输入视频号,如BVxxxxxxxxxx：")
+        bv = input("请输入视频号：")
         
-    url = f"https://www.bilibili.com/video/{bv}/"
-    
-    response = requests.get(url, headers=dic)  # 发送请求
-    response.encoding = 'utf-8'
+        # 处理用户输入的循环
+        while True:
+            if not obj_BV.match(bv):
+                print("输入的视频号不符合格式！")
+                bv = input("请重新输入视频号：")
+                continue  # 继续上面的循环重新输入
+            else:
+                break  # 输入合法，跳出当前循环
+            
+        url = f"https://www.bilibili.com/video/{bv}/"
+        
+        response = requests.get(url, headers=dic)  # 发送请求
+        response.encoding = 'utf-8'
 
-    result_title_findErro = obj_title_findErro.search(response.text)
-    if result_title_findErro == None:
-        result_title = obj_title_find.search(response.text)
-        title = result_title.group("title")
-    else:
-        title = result_title_findErro.group("title_find1")
+        result_title_findErro = obj_title_findErro.search(response.text)
+        if result_title_findErro == None:
+            result_title = obj_title_find.search(response.text)
+            title = result_title.group("title")
+        else:
+            title = result_title_findErro.group("title_find1")
 
-    if "出错啦!" in title or "视频去哪了呢？" in title:
-        print("视频不存在或已被删除！")
-        continue  # 视频不可用时，直接回到输入 BV 的部分
+        if "出错啦!" in title or "视频去哪了呢？" in title:
+            print("视频不存在或已被删除！")
+            continue  # 视频不可用时，直接回到输入 BV 的部分
 
-    print("获取标题成功")
-    title_choice = input(f"是否下载标题为:《{title}》,的视频？(y/n): ")
+        print("获取标题成功")
+        title_choice = input(f"是否下载标题为:《{title}》,的视频？(y/n): ")
 
-    if title_choice == "n":
-        choice = input("视频不对？是否输入新的BV号？按y重新输入，按n直接下载已输入BV号视频，按e退出程序：")
-        if choice == "y":
-            continue  # 直接重新进入输入视频号的逻辑
-        elif choice == "e":
-            response.close()  # 关闭请求
-            print("程序已退出。")
-            exit()
+        if title_choice == "n":
+            choice = input("视频不对？是否输入新的BV号？按y重新输入，按n直接下载已输入BV号视频，按e退出程序：")
+            if choice == "y":
+                continue  # 直接重新进入输入视频号的逻辑
+            elif choice == "e":
+                response.close()  # 关闭请求
+                print("程序已退出。")
+                exit()
 
-    # 如果选择下载
-    if title_choice == "y":
-        continue  # 直接进入下载逻辑
+        # 如果选择下载
+        if title_choice == "y":
+            continue  # 直接进入下载逻辑
 
     print("开始下载...")
 
@@ -136,9 +149,10 @@ while restart == "y":
         redanwload = input("输入错误！请重新输入:")
     else:
         if redanwload == "y":
-            restart = "y"
+            retry_way = input("请选择下载方式：1.搜索关键词 2.输入视频号（BV号或av号）：(输错退出程序)")
         else:
-            restart = "n"
+            retry_way = "n"
+            response.close() #关闭请求
+            exit()
 
-    response.close() #关闭请求
-    print("程序已退出。")
+print("程序已退出。")
